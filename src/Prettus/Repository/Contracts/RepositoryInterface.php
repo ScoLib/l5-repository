@@ -82,12 +82,22 @@ interface RepositoryInterface
     /**
      * Find data by id
      *
-     * @param       $id
+     * @param mixed $id
      * @param array $columns
-     *
      * @return mixed
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function find($id, $columns = ['*']);
+
+    /**
+     * Find data by id or throw an exception.
+     *
+     * @param mixed $id
+     * @param array $columns
+     * @return mixed
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function findOrFail($id, $columns = ['*']);
 
     /**
      * Find data by field and value
