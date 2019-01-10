@@ -91,6 +91,7 @@ php artisan vendor:publish --provider "Prettus\Repository\Providers\RepositorySe
 - first($columns = array('*'))
 - paginate($limit = null, $columns = ['*'])
 - find($id, $columns = ['*'])
+- findOrFail($id, $columns = ['*'])
 - findByField($field, $value, $columns = ['*'])
 - findWhere(array $where, $columns = ['*'])
 - findWhereIn($field, array $where, $columns = [*])
@@ -354,6 +355,12 @@ Find by result by id
 
 ```php
 $post = $this->repository->find($id);
+```
+
+Find by result by id or throw an exception.
+
+```php
+$post = $this->repository->findOrFail($id);
 ```
 
 Hiding attributes of the model
