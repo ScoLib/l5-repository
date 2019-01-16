@@ -98,6 +98,7 @@ php artisan vendor:publish --provider "Prettus\Repository\Providers\RepositorySe
 - findWhereNotIn($field, array $where, $columns = [*])
 - create(array $attributes)
 - update(array $attributes, $id)
+- updateWhere(array $values, array $where = [])
 - updateOrCreate(array $attributes, array $values = [])
 - delete($id)
 - deleteWhere(array $where)
@@ -429,6 +430,17 @@ Update entry in Repository
 
 ```php
 $post = $this->repository->update( Input::all(), $id );
+```
+
+Update entry in Repository by multiple fields
+
+```php
+$post = $this->repository->updateWhere([
+	'status' => 1
+], [
+    'state_id'=>'10',
+    'country_id'=>'15',
+]);
 ```
 
 Delete entry in Repository
