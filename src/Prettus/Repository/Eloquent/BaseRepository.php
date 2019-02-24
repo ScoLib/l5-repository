@@ -370,6 +370,27 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
     }
 
     /**
+     * Find the first data by multiple fields
+     *
+     * @param array $where
+     * @param array $columns
+     * @return mixed
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function firstWhere(array $where, $columns = ['*'])
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+
+        $this->applyConditions($where);
+
+        $model = $this->model->first($columns);
+        $this->resetModel();
+
+        return $this->parserResult($model);
+    }
+
+    /**
      * Retrieve first data of repository, or return new Entity
      *
      * @param array $attributes

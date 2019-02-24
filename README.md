@@ -89,6 +89,9 @@ php artisan vendor:publish --provider "Prettus\Repository\Providers\RepositorySe
 
 - all($columns = array('*'))
 - first($columns = array('*'))
+- firstWhere(array $where, $columns = ['*'])
+- firstOrNew(array $attributes = [])
+- firstOrCreate(array $attributes = [])
 - paginate($limit = null, $columns = ['*'])
 - find($id, $columns = ['*'])
 - findOrFail($id, $columns = ['*'])
