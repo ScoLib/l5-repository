@@ -288,16 +288,6 @@ interface RepositoryInterface
     public function first($columns = ['*']);
 
     /**
-     * Find the first data by multiple fields
-     *
-     * @param array $where
-     * @param array $columns
-     * @return mixed
-     * @throws \Prettus\Repository\Exceptions\RepositoryException
-     */
-    public function firstWhere(array $where, $columns = ['*']);
-
-    /**
      * Retrieve first data of repository, or return new Entity
      *
      * @param array $attributes
