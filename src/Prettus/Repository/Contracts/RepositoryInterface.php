@@ -1,8 +1,10 @@
 <?php
+
 namespace Prettus\Repository\Contracts;
 
 /**
  * Interface RepositoryInterface
+ *
  * @package Prettus\Repository\Contracts
  * @author Anderson Andrade <contato@andersonandra.de>
  */
@@ -22,6 +24,7 @@ interface RepositoryInterface
     /**
      * Retrieve data array for populate field select
      * Compatible with Laravel 5.3
+     *
      * @param string $column
      * @param string|null $key
      *
@@ -48,7 +51,7 @@ interface RepositoryInterface
      * @param $attributes
      * @return mixed
      */
-     public function syncWithoutDetaching($id, $relation, $attributes);
+    public function syncWithoutDetaching($id, $relation, $attributes);
 
     /**
      * Retrieve all data of repository
@@ -181,6 +184,15 @@ interface RepositoryInterface
      * @return int
      */
     public function delete($id);
+
+    /**
+     * Delete multiple entities by given criteria.
+     *
+     * @param array $where
+     * @return bool|int|null
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function deleteWhere(array $where);
 
     /**
      * Order collection by a given column

@@ -729,11 +729,7 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
     }
 
     /**
-     * Delete multiple entities by given criteria.
-     *
-     * @param array $where
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function deleteWhere(array $where)
     {
