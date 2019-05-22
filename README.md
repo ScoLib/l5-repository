@@ -89,14 +89,18 @@ php artisan vendor:publish --provider "Prettus\Repository\Providers\RepositorySe
 
 - all($columns = array('*'))
 - first($columns = array('*'))
+- firstOrNew(array $attributes = [])
+- firstOrCreate(array $attributes = [])
 - paginate($limit = null, $columns = ['*'])
 - find($id, $columns = ['*'])
+- findOrFail($id, $columns = ['*'])
 - findByField($field, $value, $columns = ['*'])
 - findWhere(array $where, $columns = ['*'])
 - findWhereIn($field, array $where, $columns = [*])
 - findWhereNotIn($field, array $where, $columns = [*])
 - create(array $attributes)
 - update(array $attributes, $id)
+- updateWhere(array $values, array $where = [])
 - updateOrCreate(array $attributes, array $values = [])
 - delete($id)
 - deleteWhere(array $where)
@@ -356,6 +360,12 @@ Find by result by id
 $post = $this->repository->find($id);
 ```
 
+Find by result by id or throw an exception.
+
+```php
+$post = $this->repository->findOrFail($id);
+```
+
 Hiding attributes of the model
 
 ```php
@@ -422,6 +432,17 @@ Update entry in Repository
 
 ```php
 $post = $this->repository->update( Input::all(), $id );
+```
+
+Update entry in Repository by multiple fields
+
+```php
+$post = $this->repository->updateWhere([
+	'status' => 1
+], [
+    'state_id'=>'10',
+    'country_id'=>'15',
+]);
 ```
 
 Delete entry in Repository

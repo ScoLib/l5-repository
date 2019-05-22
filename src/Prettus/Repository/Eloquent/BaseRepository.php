@@ -261,6 +261,8 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
      * @param string|null $key
      *
      * @return \Illuminate\Support\Collection|array
+     *
+     * @deprecated since version 5.2. Use the "pluck" method directly.
      */
     public function lists($column, $key = null)
     {
@@ -450,12 +452,30 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
     /**
      * Find data by id
      *
-     * @param       $id
+     * @param mixed $id
      * @param array $columns
-     *
      * @return mixed
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function find($id, $columns = ['*'])
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+        $model = $this->model->find($id, $columns);
+        $this->resetModel();
+
+        return $this->parserResult($model);
+    }
+
+    /**
+     * Find data by id or throw an exception.
+     *
+     * @param mixed $id
+     * @param array $columns
+     * @return mixed
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function findOrFail($id, $columns = ['*'])
     {
         $this->applyCriteria();
         $this->applyScope();
@@ -624,14 +644,40 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
     }
 
     /**
-     * Update or Create an entity in repository
+     * update in repository by where
      *
-     * @throws ValidatorException
+     * @param array $values
+     * @param array $where
+     * @return bool
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function updateWhere(array $values, array $where = [])
+    {
+        $this->applyScope();
+
+        $temporarySkipPresenter = $this->skipPresenter;
+        $this->skipPresenter(true);
+
+        $this->applyConditions($where);
+
+        $updated = $this->model->update($values);
+
+        event(new RepositoryEntityUpdated($this, $this->model->getModel()));
+
+        $this->skipPresenter($temporarySkipPresenter);
+        $this->resetModel();
+
+        return $updated;
+    }
+
+    /**
+     * Update or Create an entity in repository
      *
      * @param array $attributes
      * @param array $values
-     *
      * @return mixed
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function updateOrCreate(array $attributes, array $values = [])
     {
@@ -683,11 +729,7 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
     }
 
     /**
-     * Delete multiple entities by given criteria.
-     *
-     * @param array $where
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function deleteWhere(array $where)
     {

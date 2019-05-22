@@ -1,8 +1,10 @@
 <?php
+
 namespace Prettus\Repository\Contracts;
 
 /**
  * Interface RepositoryInterface
+ *
  * @package Prettus\Repository\Contracts
  * @author Anderson Andrade <contato@andersonandra.de>
  */
@@ -22,6 +24,7 @@ interface RepositoryInterface
     /**
      * Retrieve data array for populate field select
      * Compatible with Laravel 5.3
+     *
      * @param string $column
      * @param string|null $key
      *
@@ -48,7 +51,7 @@ interface RepositoryInterface
      * @param $attributes
      * @return mixed
      */
-     public function syncWithoutDetaching($id, $relation, $attributes);
+    public function syncWithoutDetaching($id, $relation, $attributes);
 
     /**
      * Retrieve all data of repository
@@ -82,12 +85,22 @@ interface RepositoryInterface
     /**
      * Find data by id
      *
-     * @param       $id
+     * @param mixed $id
      * @param array $columns
-     *
      * @return mixed
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function find($id, $columns = ['*']);
+
+    /**
+     * Find data by id or throw an exception.
+     *
+     * @param mixed $id
+     * @param array $columns
+     * @return mixed
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function findOrFail($id, $columns = ['*']);
 
     /**
      * Find data by field and value
@@ -171,6 +184,15 @@ interface RepositoryInterface
      * @return int
      */
     public function delete($id);
+
+    /**
+     * Delete multiple entities by given criteria.
+     *
+     * @param array $where
+     * @return bool|int|null
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
+    public function deleteWhere(array $where);
 
     /**
      * Order collection by a given column
@@ -267,6 +289,15 @@ interface RepositoryInterface
      * @return $this
      */
     public function skipPresenter($status = true);
+
+    /**
+     * Retrieve first data of repository
+     *
+     * @param array $columns
+     *
+     * @return mixed
+     */
+    public function first($columns = ['*']);
 
     /**
      * Retrieve first data of repository, or return new Entity
