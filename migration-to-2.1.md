@@ -1,6 +1,6 @@
 # Laravel 5 Repositories
 
-[![Analytics](https://ga-beacon.appspot.com/UA-61050740-1/l5-repository/migration-to-2.1)](https://packagist.org/packages/prettus/l5-repository)
+[![Analytics](https://ga-beacon.appspot.com/UA-140657639-1/l5-repository/migration-to-2.1)](https://packagist.org/packages/scolib/l5-repository)
 
 Some changes between version 2.0 and 2.1
 
