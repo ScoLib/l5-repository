@@ -42,7 +42,7 @@ class ControllerCommand extends Command
      */
     public function __construct()
     {
-        $this->name = ((float) app()->version() >= 5.5  ? 'make:rest-controller' : 'make:resource');
+        $this->name = 'make:rest-controller';
         parent::__construct();
     }
 
