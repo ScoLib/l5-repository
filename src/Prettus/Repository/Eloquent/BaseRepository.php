@@ -256,23 +256,6 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
 
     /**
      * Retrieve data array for populate field select
-     *
-     * @param string $column
-     * @param string|null $key
-     *
-     * @return \Illuminate\Support\Collection|array
-     *
-     * @deprecated since version 5.2. Use the "pluck" method directly.
-     */
-    public function lists($column, $key = null)
-    {
-        $this->applyCriteria();
-
-        return $this->model->lists($column, $key);
-    }
-
-    /**
-     * Retrieve data array for populate field select
      * Compatible with Laravel 5.3
      * @param string $column
      * @param string|null $key
@@ -370,13 +353,9 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
     }
 
     /**
-     * Retrieve first data of repository, or return new Entity
-     *
-     * @param array $attributes
-     *
-     * @return mixed
+     * @inheritDoc
      */
-    public function firstOrNew(array $attributes = [])
+    public function firstOrNew(array $attributes, array $values = [])
     {
         $this->applyCriteria();
         $this->applyScope();
@@ -384,7 +363,7 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
         $temporarySkipPresenter = $this->skipPresenter;
         $this->skipPresenter(true);
 
-        $model = $this->model->firstOrNew($attributes);
+        $model = $this->model->firstOrNew($attributes, $values);
         $this->skipPresenter($temporarySkipPresenter);
 
         $this->resetModel();
@@ -393,13 +372,9 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
     }
 
     /**
-     * Retrieve first data of repository, or create new Entity
-     *
-     * @param array $attributes
-     *
-     * @return mixed
+     * @inheritDoc
      */
-    public function firstOrCreate(array $attributes = [])
+    public function firstOrCreate(array $attributes = [], array $values = [])
     {
         $this->applyCriteria();
         $this->applyScope();
@@ -407,7 +382,7 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
         $temporarySkipPresenter = $this->skipPresenter;
         $this->skipPresenter(true);
 
-        $model = $this->model->firstOrCreate($attributes);
+        $model = $this->model->firstOrCreate($attributes, $values);
         $this->skipPresenter($temporarySkipPresenter);
 
         $this->resetModel();
@@ -480,6 +455,19 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
         $this->applyCriteria();
         $this->applyScope();
         $model = $this->model->findOrFail($id, $columns);
+        $this->resetModel();
+
+        return $this->parserResult($model);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findOrNew($id, $columns = ['*'])
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+        $model = $this->model->findOrNew($id, $columns);
         $this->resetModel();
 
         return $this->parserResult($model);
@@ -578,13 +566,10 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
             // we should pass data that has been casts by the model
             // to make sure data type are same because validator may need to use
             // this data to compare with data that fetch from database.
-            if( $this->versionCompare($this->app->version(), "5.2.*", ">") ){
-                $attributes = $this->model->newInstance()->forceFill($attributes)->makeVisible($this->model->getHidden())->toArray();
-            }else{
-                $model = $this->model->newInstance()->forceFill($attributes);
-                $model->addVisible($this->model->getHidden());
-                $attributes = $model->toArray();
-            }
+            $attributes = $this->model->newInstance()
+                ->forceFill($attributes)
+                ->makeVisible($this->model->getHidden())
+                ->toArray();
 
             $this->validator->with($attributes)->passesOrFail(ValidatorInterface::RULE_CREATE);
         }
@@ -616,13 +601,10 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
             // we should pass data that has been casts by the model
             // to make sure data type are same because validator may need to use
             // this data to compare with data that fetch from database.
-            if( $this->versionCompare($this->app->version(), "5.2.*", ">") ){
-                $attributes = $this->model->newInstance()->forceFill($attributes)->makeVisible($this->model->getHidden())->toArray();
-            }else{
-                $model = $this->model->newInstance()->forceFill($attributes);
-                $model->addVisible($this->model->getHidden());
-                $attributes = $model->toArray();
-            }
+            $attributes = $this->model->newInstance()
+                ->forceFill($attributes)
+                ->makeVisible($this->model->getHidden())
+                ->toArray();
 
             $this->validator->with($attributes)->setId($id)->passesOrFail(ValidatorInterface::RULE_UPDATE);
         }

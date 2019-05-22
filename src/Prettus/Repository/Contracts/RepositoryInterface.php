@@ -10,17 +10,6 @@ namespace Prettus\Repository\Contracts;
  */
 interface RepositoryInterface
 {
-
-    /**
-     * Retrieve data array for populate field select
-     *
-     * @param string $column
-     * @param string|null $key
-     *
-     * @return \Illuminate\Support\Collection|array
-     */
-    public function lists($column, $key = null);
-
     /**
      * Retrieve data array for populate field select
      * Compatible with Laravel 5.3
@@ -83,7 +72,7 @@ interface RepositoryInterface
     public function simplePaginate($limit = null, $columns = ['*']);
 
     /**
-     * Find data by id
+     * Find data by its primary key
      *
      * @param mixed $id
      * @param array $columns
@@ -93,7 +82,7 @@ interface RepositoryInterface
     public function find($id, $columns = ['*']);
 
     /**
-     * Find data by id or throw an exception.
+     * Find data by its primary key or throw an exception.
      *
      * @param mixed $id
      * @param array $columns
@@ -101,6 +90,15 @@ interface RepositoryInterface
      * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function findOrFail($id, $columns = ['*']);
+
+    /**
+     * Find data by its primary key or return fresh model instance.
+     *
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return mixed
+     */
+    public function findOrNew($id, $columns = ['*']);
 
     /**
      * Find data by field and value
@@ -303,17 +301,19 @@ interface RepositoryInterface
      * Retrieve first data of repository, or return new Entity
      *
      * @param array $attributes
+     * @param array $values
      *
      * @return mixed
      */
-    public function firstOrNew(array $attributes = []);
+    public function firstOrNew(array $attributes, array $values = []);
 
     /**
      * Retrieve first data of repository, or create new Entity
      *
      * @param array $attributes
+     * @param array $values
      *
      * @return mixed
      */
-    public function firstOrCreate(array $attributes = []);
+    public function firstOrCreate(array $attributes = [], array $values = []);
 }

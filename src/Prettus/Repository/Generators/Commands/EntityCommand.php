@@ -78,7 +78,7 @@ class EntityCommand extends Command
             ];
 
             // Generate a controller resource
-            $controller_command = ((float) app()->version() >= 5.5  ? 'make:rest-controller' : 'make:resource');
+            $controller_command = 'make:rest-controller';
             $this->call($controller_command, $resource_args);
         }
 
